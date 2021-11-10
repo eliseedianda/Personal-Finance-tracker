@@ -12,12 +12,17 @@ import {
 import useStyles from "./form.styles";
 import { FinanceTrackerContext } from "../../../context/context";
 import { v4 as uuidv4 } from "uuid";
+import {
+  incomeCategories,
+  expenseCategories,
+} from "../../../constants/categories";
+import FormatDate from "../../../utils/formatDate";
 
 const initialState = {
   amount: "",
   category: "",
   type: "Income",
-  date: new Date(),
+  date: FormatDate(new Date()),
 };
 const Form = () => {
   const classes = useStyles();
@@ -26,7 +31,7 @@ const Form = () => {
   const handleType = (e) => setData({ ...data, type: e.target.value });
   const handleCategory = (e) => setData({ ...data, category: e.target.value });
   const handleAmount = (e) => setData({ ...data, amount: e.target.value });
-  const handleDate = (e) => setData({ ...data, date: e.target.value });
+  // const handleDate =
 
   const { addTransaction } = useContext(FinanceTrackerContext);
 
@@ -36,6 +41,8 @@ const Form = () => {
     setData(initialState);
   };
 
+  const selectCategories =
+    data.type === "Income" ? incomeCategories : expenseCategories;
   return (
     <div>
       <Grid container spacing={2}>
@@ -57,8 +64,11 @@ const Form = () => {
           <FormControl fullWidth>
             <InputLabel>Category</InputLabel>
             <Select value={data.category} onChange={handleCategory} fullwidth>
-              <MenuItem value="business">business</MenuItem>
-              <MenuItem value="salary">salary</MenuItem>
+              {selectCategories.map((categor) => (
+                <MenuItem key={categor.type} value={categor.type}>
+                  {categor.type}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -66,7 +76,7 @@ const Form = () => {
           <TextField
             type="number"
             label="Amount"
-            value={data.Amount}
+            value={data.amount}
             onChange={handleAmount}
             fuulWidth
           />
@@ -76,7 +86,9 @@ const Form = () => {
             type="date"
             label="Date"
             value={data.date}
-            onChange={handleDate}
+            onChange={(e) =>
+              setData({ ...data, date: FormatDate(e.target.value) })
+            }
             fullWidth
           />
         </Grid>

@@ -15,12 +15,12 @@ import { Delete, MoneyOff } from "@material-ui/icons";
 
 const List = () => {
   const classes = useStyles();
-  const { deleteTransaction, transact } = useContext(FinanceTrackerContext);
+  const { deleteTransaction, transaction } = useContext(FinanceTrackerContext);
 
   return (
     <div>
       <MUIList dense={false} className={classes.list}>
-        {transact.map((transaction) => (
+        {transaction.map((transaction) => (
           <Slide
             direction="down"
             in
@@ -45,7 +45,11 @@ const List = () => {
                 secondary={`R${transaction.amount} -${transaction.date}`}
               />
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete">
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => deleteTransaction(transaction.id)}
+                >
                   <Delete />
                 </IconButton>
               </ListItemSecondaryAction>
