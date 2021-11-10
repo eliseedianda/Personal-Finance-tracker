@@ -31,7 +31,6 @@ const Form = () => {
   const handleType = (e) => setData({ ...data, type: e.target.value });
   const handleCategory = (e) => setData({ ...data, category: e.target.value });
   const handleAmount = (e) => setData({ ...data, amount: e.target.value });
-  // const handleDate =
 
   const { addTransaction } = useContext(FinanceTrackerContext);
 
@@ -86,9 +85,7 @@ const Form = () => {
             type="date"
             label="Date"
             value={data.date}
-            onChange={(e) =>
-              setData({ ...data, date: FormatDate(e.target.value) })
-            }
+            onChange={(e) => setData({ ...data, date: e.target.value })}
             fullWidth
           />
         </Grid>

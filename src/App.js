@@ -3,6 +3,11 @@ import Table from "./components/tables/tables.component";
 import { Grid } from "@material-ui/core";
 import useStyles from "./styles";
 import Main from "./components/Main/main";
+import {
+  PushToTalkButton,
+  PushToTalkButtonContainer,
+  ErrorPanel,
+} from "@speechly/react-ui";
 const App = () => {
   const classes = useStyles();
   return (
@@ -28,6 +33,10 @@ const App = () => {
           <Table title="Expense" />
         </Grid>
       </Grid>
+      <PushToTalkButtonContainer>
+        <PushToTalkButton />
+        <ErrorPanel />
+      </PushToTalkButtonContainer>
     </div>
   );
 };

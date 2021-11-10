@@ -1,8 +1,8 @@
 const FormatDate = (date) => {
-  let d = new Date(date);
+  const d = new Date(date);
   let month = `${d.getMonth() + 1}`;
-  let day = `${d.getDate()}`;
-  let year = d.getFullYear();
+  const day = `${d.getDate()}`;
+  const year = d.getFullYear();
 
   if (month.length < 2) {
     month = `0${month}`;
@@ -10,7 +10,7 @@ const FormatDate = (date) => {
   if (day.length < 2) {
     day = `0${day}`;
   }
-  return [year, day, month].join("-");
+  return [year, month, day].join("-");
 };
 
 export default FormatDate;

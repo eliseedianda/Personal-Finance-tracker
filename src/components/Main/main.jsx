@@ -22,7 +22,7 @@ const Main = () => {
         />
         <CardContent>
           <Typography align="center" variant="h4">
-            Total Balance R50000
+            Total Balance R7300
           </Typography>
           <Typography
             variant="subtitle1"
