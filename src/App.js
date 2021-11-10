@@ -13,17 +13,17 @@ const App = () => {
         spacing={2}
         alignItems="center"
         justify="center"
-        style={{ height: "100vh" }}
+        style={{ height: "100vh", width: "220vh" }}
       >
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           {" "}
           <Table title="Income" />
         </Grid>
         <Grid item xs={12} sm={3}>
           {" "}
-          <Main />
+          <Main fullwidth />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           {" "}
           <Table title="Expense" />
         </Grid>
