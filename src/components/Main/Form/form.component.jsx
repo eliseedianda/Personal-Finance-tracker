@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   TextField,
   Typography,
@@ -17,6 +17,8 @@ import {
   expenseCategories,
 } from "../../../constants/categories";
 import FormatDate from "../../../utils/formatDate";
+import { useSpeechContext } from "@speechly/react-client";
+import Cnackbar from "../../snackbar/Snackbar.component";
 
 const initialState = {
   amount: "",
@@ -27,6 +29,8 @@ const initialState = {
 const Form = () => {
   const classes = useStyles();
   const [data, setData] = useState(initialState);
+  const { segment } = useSpeechContext();
+  const [open, setOpen] = useState(false);
 
   const handleType = (e) => setData({ ...data, type: e.target.value });
   const handleCategory = (e) => setData({ ...data, category: e.target.value });
@@ -35,19 +39,78 @@ const Form = () => {
   const { addTransaction } = useContext(FinanceTrackerContext);
 
   const createTransaction = () => {
+    if (Number.isNaN(Number(data.amount)) || !data.date.includes("-")) {
+      return;
+    }
     const transaction = { ...data, amount: Number(data.amount), id: uuidv4() };
+
+    setOpen(true);
     addTransaction(transaction);
     setData(initialState);
   };
+  useEffect(() => {
+    if (segment) {
+      if (segment.intent.intent === "add_expense") {
+        setData({ ...data, type: "Expense" });
+      } else if (segment.intent.intent === "add_income") {
+        setData({ ...data, type: "Income" });
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === "creat_transaction"
+      ) {
+        return createTransaction();
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === "cancel_transaction"
+      ) {
+        return setData(initialState);
+      }
+      segment.entities.forEach((e) => {
+        const category = `${e.value.charAt(0)}${e.value
+          .slice(1)
+          .toLocaleLowerCase()}`;
+        switch (e.type) {
+          case "amount":
+            setData({ ...data, amount: e.value });
+            break;
+          case "category":
+            if (incomeCategories.map((c) => c.type).includes(category)) {
+              setData({ ...data, type: "Income", category });
+            } else if (
+              expenseCategories.map((c) => c.type).includes(category)
+            ) {
+              setData({ ...data, type: "Expense", category });
+            }
 
+            break;
+          case "date":
+            setData({ ...data, date: e.value });
+            break;
+          default:
+            break;
+        }
+      });
+
+      if (
+        segment.isFinal &&
+        data.amount &&
+        data.category &&
+        data.date &&
+        data.type
+      ) {
+        createTransaction();
+      }
+    }
+  }, [segment]);
   const selectCategories =
     data.type === "Income" ? incomeCategories : expenseCategories;
   return (
     <div>
       <Grid container spacing={2}>
+        <Cnackbar open={open} setOpen={setOpen} />
         <Grid item xs={12}>
           <Typography align="center" variant="subtitle2" gutterBottom>
-            {" "}
+            {segment && segment.words.map((w) => w.value).join(" ")}
           </Typography>
         </Grid>
         <Grid item xs={6}>
