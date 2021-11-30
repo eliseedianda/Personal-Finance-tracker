@@ -1,4 +1,5 @@
 # Personal Finance Tracker
+check it out here: https://eliseed-personal-finance-tracker.netlify.app/
 ![Screenshot (339)](https://user-images.githubusercontent.com/93252368/144102332-436b53da-732f-4bb6-8e34-f39a9d1e78c2.png)
 
 Getting Started with Create React App
